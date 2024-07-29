@@ -15,11 +15,10 @@ from port.api.commands import (CommandSystemDonate, CommandUIRender, CommandSyst
 
 LOG_STREAM = io.StringIO()
 
-####################################
-# Note for Max:
 # If you uncomment this line log will be streamed to a buffer
 # this buffer can be read out and "donated" (stored) as a file
 # and can be inspected during research
+# donate_logs() will not donate any logs if the buffer isn't used
 
 logging.basicConfig(
     #stream=LOG_STREAM, # if you uncomment this line, logs will be send to buffer
@@ -31,8 +30,6 @@ logging.basicConfig(
 LOGGER = logging.getLogger("script")
 
 
-####################################
-# Note for Max:
 # In process() you will find the object donation_dict
 # This is not something I usually do, but is needed for tiktok
 # If you check the code you can see that donation_dict is only used with tiktok
@@ -126,7 +123,7 @@ def process(session_id):
 
 
 ##################################################################
-# Function that define the extraction logic
+# Functions that define the extraction logic
 
 def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tuple[list[props.PropsUIPromptConsentFormTable], dict]:
     """
@@ -236,6 +233,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
 
     df = tiktok.browsing_history_to_df(tiktok_file)
     if not df.empty:
+        # We only render the first chunk as table, but donate everything
         dfs = helpers.split_dataframe(df, 250000)
         for i, df in enumerate(dfs):
             df_name = f"tiktok_video_browsing_history_{i}"
@@ -257,6 +255,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
                     "nl": "De tabel hieronder geeft aan welke TikTok video's je precies hebt bekeken en wanneer dat was. De grafiek laat zien hoeveel video's je elke maand hebt bekeken. Heb je precies 250000 rijen in de tabel zitten? Dat konden we niet al je data laten zien in deze tabel. Ben je benieuwd naar de rest? Open de zipfile, ga naar 'Activity' en open 'Browsing history.txt'. Dan kun je zelf de rest bekijken. Lukt het niet? Laat het ons even weten via WhatsApp.",
                  }
             )
+            # only the first df chunk is shown as table 
             if i == 0:
                 table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, [hours_logged_in]) 
                 tables_to_render.append(table)
@@ -302,6 +301,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
 
+    '''
     df = tiktok.hashtag_to_df(tiktok_file)
     if not df.empty:
         df_name = "tiktok_hashtag"
@@ -320,6 +320,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
+    '''
 
     df = tiktok.like_list_to_df(tiktok_file)
     if not df.empty:
@@ -384,7 +385,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
 
-
+    '''
     df = tiktok.settings_to_df(tiktok_file)
     if not df.empty:
         df_name = "tiktok_settings"
@@ -398,6 +399,65 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
+    '''
+
+    df = tiktok.follower_to_df(tiktok_file)
+    if not df.empty:
+        df_name = "tiktok_followers"
+        table_title = props.Translatable(
+            {
+                "en": "Followers", 
+                "nl": "Followers", 
+            }
+        )
+        table_description = props.Translatable(
+            {
+                "nl": "In de tabel hieronder vind je je followers en het tijdstip waarop ze je gingen followen.",
+                "en": "In de tabel hieronder vind je je followers en het tijdstip waarop ze je gingen followen.",
+             }
+        )
+        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        tables_to_render.append(table)
+        donation_dict[df_name] = df.to_dict(orient="records")
+
+    df = tiktok.following_to_df(tiktok_file)
+    if not df.empty:
+        df_name = "tiktok_following"
+        table_title = props.Translatable(
+            {
+                "en": "Following", 
+                "nl": "Following", 
+            }
+        )
+        table_description = props.Translatable(
+            {
+                "nl": "In de tabel hieronder vind je gebruikers die je volgt en het tijdstip waarop je ze bent gaan volgen.",
+                "en": "In de tabel hieronder vind je gebruikers die je volgt en het tijdstip waarop je ze bent gaan volgen.",
+             }
+        )
+        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        tables_to_render.append(table)
+        donation_dict[df_name] = df.to_dict(orient="records")
+    
+    df = tiktok.block_list_to_df(tiktok_file)
+    if not df.empty:
+        df_name = "tiktok_block_list"
+        table_title = props.Translatable(
+            {
+                "en": "Blocked accounts on TikTok", 
+                "nl": "Geblokeerde accounts op TikTok"
+                }
+        )
+        table_description = props.Translatable(
+            {
+                "nl": "Hieronder vind je gebruikers die je blokeert.",
+                "en": "Hieronder vind je gebruikers die je blokeert.",
+             }
+        )
+        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        tables_to_render.append(table)
+        donation_dict[df_name] = df.to_dict(orient="records")
+    
 
     return (tables_to_render, donation_dict)
 

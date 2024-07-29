@@ -62,8 +62,8 @@ class ValidateInput:
 
     def infer_ddp_category(self, file_list_input: list[str]) -> bool:
         """
-        Compares a list of files to a list of known files.
-        From that comparison infer the DDP Category
+        Compares a list of files to a list of known files within the DDP categories.
+        From that comparison infer the DDP Category, e.g. a language-specific DDP
         Note: at least 5% percent of known files should match
         """
         prop_category = {}

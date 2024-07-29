@@ -213,10 +213,10 @@ def watch_history_extract_html(bytes: io.BytesIO) -> pd.DataFrame:
     return out
 
 
-# Extract watch history
+# Extract search history
 def search_history_extract_html(bytes: io.BytesIO) -> pd.DataFrame:
     """
-    watch-history.html bytes buffer to pandas dataframe
+    search-history.html bytes buffer to pandas dataframe
     """
 
     out = pd.DataFrame()

@@ -177,9 +177,9 @@ def follower_to_df(tiktok_zip: str):
         b = io.TextIOWrapper(b, encoding='utf-8')
         text = b.read()
 
-        pattern = re.compile(r"^Date: (.*?)$", re.MULTILINE)
+        pattern = re.compile(r"^Date: (.*?)\nUsername: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
-        out = pd.DataFrame(matches, columns=["Date"])
+        out = pd.DataFrame(matches, columns=["Date", "Username"])
 
     except Exception as e:
         logger.error(e)
@@ -197,9 +197,9 @@ def following_to_df(tiktok_zip: str):
         b = io.TextIOWrapper(b, encoding='utf-8')
         text = b.read()
 
-        pattern = re.compile(r"^Date: (.*?)$", re.MULTILINE)
+        pattern = re.compile(r"^Date: (.*?)\nUsername: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
-        out = pd.DataFrame(matches, columns=["Date"])
+        out = pd.DataFrame(matches, columns=["Date", "Username"])
 
     except Exception as e:
         logger.error(e)
@@ -305,4 +305,22 @@ def settings_to_df(tiktok_zip: str):
 
     return out
 
+
+def block_list_to_df(tiktok_zip: str):
+
+    out = pd.DataFrame()
+
+    try:
+        b = unzipddp.extract_file_from_zip(tiktok_zip, "Block List.txt")
+        b = io.TextIOWrapper(b, encoding='utf-8')
+        text = b.read()
+
+        pattern = re.compile(r"^Date: (.*?)\nUsername: (.*?)$", re.MULTILINE)
+        matches = re.findall(pattern, text)
+        out = pd.DataFrame(matches, columns=["Date", "Username"])
+
+    except Exception as e:
+        logger.error(e)
+
+    return out
 
