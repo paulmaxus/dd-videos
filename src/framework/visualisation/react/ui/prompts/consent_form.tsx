@@ -217,7 +217,7 @@ function prepareCopy({ donateQuestion, donateButton, description, locale }: Prop
 
 const defaultDonateQuestionLabel = new TextBundle()
   .add("en", "Do you want to donate the above data?")
-  .add("nl", "Wilt u de bovenstaande gegevens doneren?")
+  .add("nl", "Wil je de bovenstaande gegevens doneren?")
 
 const defaultDonateButtonLabel = new TextBundle().add("en", "Yes, donate").add("nl", "Ja, doneer")
 
@@ -228,7 +228,7 @@ const defaultDescription = new TextBundle()
   )
   .add(
     "nl",
-    "Bepaal of u de onderstaande gegevens wilt doneren. Bekijk de gegevens zorgvuldig en pas zo nodig aan. Met uw donatie draagt u bij aan het eerder beschreven onderzoek. Alvast hartelijk dank."
+    "Bepaal of je de onderstaande gegevens wilt doneren. Bekijk de gegevens zorgvuldig en pas zo nodig aan. Met je donatie draag je bij aan het eerder beschreven onderzoek. Alvast hartelijk dank."
   )
 
 const cancelButtonLabel = new TextBundle().add("en", "No").add("nl", "Nee")
