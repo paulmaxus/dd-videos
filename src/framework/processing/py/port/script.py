@@ -134,35 +134,36 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
     donation_dict = None
 
     df = youtube.watch_history_to_df(youtube_zip, validation)
+    df.columns = ['Titel', 'Url', 'Reklame', 'Kanaal', 'Tijdstip']
     # For wordcloud, workaround to not show "null" (downside: affects font size scale)
-    df["Channel"] = df["Channel"].fillna("")
+    df["Kanaal"] = df["Kanaal"].fillna("")
     if not df.empty:
         table_title = props.Translatable({
             "en": "Your YouTube watch history",
             "nl": "Je YouTube kijkgeschiedenis",
         })
         table_description = props.Translatable({
-            "en": "In this table you find the videos you watched on YouTube sorted over time. Below, you find visualizations of different parts of this table. First, you find a timeline showing you the number of videos you watched per month. Second, you find a wordcloud of the YouTube channels you viewed, where the size of the words represents how frequently you viewed YouTube channels. Third, you find a histogram indicating how many videos you have watched per hour of the day.", 
-            "nl": "In deze tabel vind je de video's die je hebt bekeken op YouTube, gesorteerd op tijd. Hieronder vind je visualisaties van verschillende onderdelen van deze tabel. Ten eerste vind je een tijdlijn met het aantal video's dat je per maand hebt bekeken. Ten tweede vind je een wordcloud van de YouTube-kanalen die je hebt bekeken, waarbij de grootte van de woorden weergeeft hoe vaak je YouTube-kanalen hebt bekeken. Ten derde vind je een histogram dat aangeeft hoeveel video's je per uur van de dag hebt bekeken.", 
+            "en": "In this table you find the videos you watched on YouTube sorted over time. Below, you find visualizations of different parts of this table.", 
+            "nl": "In deze tabel vind je de video's die je hebt bekeken op YouTube, gesorteerd op tijd. Hieronder vind je visualisaties van verschillende onderdelen van deze tabel.", 
         })
         wordcloud = {
             "title": {
-                "en": "The most frequently watched YouTube channels", 
-                "nl": "De meest bekeken YouTube-kanalen", 
+                "en": "The most frequently watched YouTube channels. The size of the words represents how frequently you viewed YouTube channels.", 
+                "nl": "De meest bekeken YouTube-kanalen. De grootte van de woorden geeft weer hoe vaak je YouTube-kanalen hebt bekeken.", 
             },
             "type": "wordcloud",
-            "textColumn": "Channel",
+            "textColumn": "Kanaal",
             "tokenize": False,
         }
 
         total_watched = {
             "title": {
-                "en": "The total number of YouTube videos you have watched per month", 
-                "nl": "Het totale aantal YouTube-video's dat je per maand hebt bekeken", 
+                "en": "The total number of YouTube videos you have watched per month.", 
+                "nl": "Het totale aantal YouTube-video's dat je per maand hebt bekeken.", 
             },
             "type": "area",
             "group": {
-                "column": "Date standard format",
+                "column": "Tijdstip",
                 "dateFormat": "month"
             },
             "values": [{
@@ -176,12 +177,12 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
 
         hour_of_the_day = {
             "title": {
-                "en": "The total number of YouTube videos you have watched per hour of the day", 
-                "nl": "Het totale aantal YouTube-video's dat je hebt bekeken per uur van de dag", 
+                "en": "The total number of YouTube videos you have watched per hour of the day.", 
+                "nl": "Het totale aantal YouTube-video's dat je hebt bekeken per uur van de dag.", 
             },
             "type": "bar",
             "group": {
-                "column": "Date standard format",
+                "column": "Tijdstip",
                 "dateFormat": "hour_cycle"
             },
             "values": [{}]
@@ -191,28 +192,30 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
         tables_to_render.append(table)
 
     df = youtube.search_history_to_df(youtube_zip, validation)
+    df.columns = ['Zoekterm', 'Url', 'Tijdstip']
     if not df.empty:
         table_title = props.Translatable({
             "en": "Your YouTube search history",
             "nl": "Je YouTube-zoekgeschiedenis",
         })
         table_description = props.Translatable({
-            "en": "In this table you find the search terms you have used on YouTube sorted over time. Below, you find a wordcloud of the search terms you used, where the size of the words represents how frequently you used a search term.", 
-            "nl": "In deze tabel vind je de zoektermen die je hebt gebruikt op YouTube, gesorteerd op tijd. Hieronder vind je een wordcloud van de zoektermen die je hebt gebruikt, waarbij de grootte van de woorden aangeeft hoe vaak je een zoekterm hebt gebruikt.", 
+            "en": "In this table you find the search terms you have used on YouTube sorted over time.", 
+            "nl": "In deze tabel vind je de zoektermen die je hebt gebruikt op YouTube, gesorteerd op tijd.", 
         })
         wordcloud = {
             "title": {
-                "en": "Words you most searched for", 
-                "nl": "Woorden waarop je het meest hebt gezocht", 
+                "en": "Words you most searched for. The size of the words represents how frequently you used a search term.", 
+                "nl": "Woorden waarop je het meest hebt gezocht. De grootte van de woorden geeft aan hoe vaak je een zoekterm hebt gebruikt.", 
             },
             "type": "wordcloud",
-            "textColumn": "Search Terms",
+            "textColumn": "Zoekterm",
             "tokenize": True,
         }
         table = props.PropsUIPromptConsentFormTable("youtube_search_history", table_title, df, table_description, [wordcloud])
         tables_to_render.append(table)
 
     df = youtube.subscriptions_to_df(youtube_zip, validation)
+    df = df[["Kanaaltitel","Kanaal-URL","Kanaal-ID"]]
     if not df.empty:
         table_title = props.Translatable({
             "en": "Your YouTube channel subscriptions",
@@ -253,8 +256,8 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
             table_title = props.Translatable({"en": "Watch history", "nl": "Kijkgeschiedenis"})
             table_description = props.Translatable(
                 {
-                    "en": "The table below shows exactly which TikTok videos you watched and when that was. The chart shows how many videos you watched each month. Do you have exactly 250000 rows in the table? Then we couldn't show all your data in this table. Are you curious about the rest? Open the zip file, go to 'Activity' and open 'Browsing history.txt'. Then you can see the rest for yourself. Can't find it? Let us know on WhatsApp.",
-                    "nl": "De tabel hieronder geeft aan welke TikTok video's je precies hebt bekeken en wanneer dat was. De grafiek laat zien hoeveel video's je elke maand hebt bekeken. Heb je precies 250000 rijen in de tabel zitten? Dat konden we niet al je data laten zien in deze tabel. Ben je benieuwd naar de rest? Open de zipfile, ga naar 'Activity' en open 'Browsing history.txt'. Dan kun je zelf de rest bekijken. Lukt het niet? Laat het ons even weten via WhatsApp.",
+                    "en": "The table below shows exactly which TikTok videos you watched and when that was. Do you have exactly 250000 rows in the table? Then we couldn't show all your data in this table. Are you curious about the rest? Open the zip file, go to 'Activity' and open 'Browsing history.txt'. Then you can see the rest for yourself. Can't find it? Let us know on WhatsApp.",
+                    "nl": "De tabel hieronder geeft aan welke TikTok video's je precies hebt bekeken en wanneer dat was. Heb je precies 250000 rijen in de tabel zitten? Dat konden we niet al je data laten zien in deze tabel. Ben je benieuwd naar de rest? Open de zipfile, ga naar 'Activity' en open 'Browsing history.txt'. Dan kun je zelf de rest bekijken. Lukt het niet? Laat het ons even weten via WhatsApp.",
                  }
             )
             # only the first df chunk is shown as table 
@@ -270,7 +273,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table_title = props.Translatable(
             {
                 "en": "Favorite videos", 
-                "nl": "Favoriete video's", 
+                "nl": "Video's die je hebt opgeslagen", 
             }
         )
         table_description = props.Translatable(
@@ -348,7 +351,8 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
     if not df.empty:
         df_name = "tiktok_searches"
         wordcloud = {
-            "title": {"en": "", "nl": ""},
+            "title": {"en": "The size of the words in the chart indicates how often the search term appears in your data.", 
+                      "nl": "De grootte van de woorden in de grafiek geeft aan hoe vaak de zoekterm voorkomt in jouw gegevens."},
             "type": "wordcloud",
             "textColumn": "Zoekterm",
         }
@@ -360,8 +364,8 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         )
         table_description = props.Translatable(
             {
-                "en": "The chart below shows what you searched for and when that was. The size of the words in the chart indicates how often the search term appears in your data.",
-                "nl": "De tabel hieronder laat zien wat je hebt gezocht en wanneer dat was. De grootte van de woorden in de grafiek geeft aan hoe vaak de zoekterm voorkomt in jouw gegevens.",
+                "en": "The chart below shows what you searched for and when that was.",
+                "nl": "De tabel hieronder laat zien wat je hebt gezocht en wanneer dat was.",
              }
         )
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, [wordcloud])

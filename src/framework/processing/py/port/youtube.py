@@ -289,7 +289,7 @@ def watch_history_to_df(youtube_zip: str, validation: ValidateInput) -> pd.DataF
 
             html_bytes_buf = unzipddp.extract_file_from_zip(youtube_zip, file_name)
             out = watch_history_extract_html(html_bytes_buf)
-            out["Date standard format"] = out["Date"].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
+            out["Date"] = out["Date"].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
 
         else:
             out = pd.DataFrame([("Er zit wel data in jouw data package, maar we hebben het er niet uitgehaald")], columns=["Extraction not implemented"])
@@ -315,7 +315,7 @@ def search_history_to_df(youtube_zip: str, validation: ValidateInput) -> pd.Data
 
             html_bytes_buf = unzipddp.extract_file_from_zip(youtube_zip, file_name)
             out = search_history_extract_html(html_bytes_buf)
-            out["Date standard format"] = out["Date"].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
+            out["Date"] = out["Date"].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
 
         else:
             out = pd.DataFrame([("Er zit wel data in jouw data package, maar we hebben het er niet uitgehaald")], columns=["Extraction not implemented"])

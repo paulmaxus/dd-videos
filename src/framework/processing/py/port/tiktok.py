@@ -121,6 +121,7 @@ def browsing_history_to_df(tiktok_zip: str) -> pd.DataFrame:
         out = pd.DataFrame(matches, columns=["Tijdstip", "Gekeken video"])
         out = out.drop_duplicates()
         out.reset_index(drop=True, inplace=True)
+        out = out[["Gekeken video", "Tijdstip"]]
 
     except Exception as e:
         logger.error(e)
@@ -141,6 +142,7 @@ def favorite_hashtag_to_df(tiktok_zip: str) -> pd.DataFrame:
         pattern = re.compile(r"^Date: (.*?)\nHashTag Link(?::|::) (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Hashtag url"])
+        out = out[["Hashtag url", "Tijdstip"]]
 
     except Exception as e:
         logger.error(e)
@@ -160,6 +162,7 @@ def favorite_videos_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nLink: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Video"])
+        out = out[["Video", "Tijdstip"]]
 
     except Exception as e:
         logger.error(e)
@@ -179,7 +182,8 @@ def follower_to_df(tiktok_zip: str):
 
         pattern = re.compile(r"^Date: (.*?)\nUsername: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
-        out = pd.DataFrame(matches, columns=["Date", "Username"])
+        out = pd.DataFrame(matches, columns=["Tijdstip", "Gebruikersnaam"])
+        out = out[["Gebruikersnaam", "Tijdstip"]]
 
     except Exception as e:
         logger.error(e)
@@ -199,7 +203,8 @@ def following_to_df(tiktok_zip: str):
 
         pattern = re.compile(r"^Date: (.*?)\nUsername: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
-        out = pd.DataFrame(matches, columns=["Date", "Username"])
+        out = pd.DataFrame(matches, columns=["Tijdstip", "Gebruikersnaam"])
+        out = out[["Gebruikersnaam", "Tijdstip"]]
 
     except Exception as e:
         logger.error(e)
@@ -219,6 +224,7 @@ def hashtag_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Hashtag Name: (.*?)\nHashtag Link: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Hashtag naam", "Hashtag url"])
+        out = out[["Gebruikersnaam", "Tijdstip"]]
 
     except Exception as e:
         logger.error(e)
@@ -239,6 +245,7 @@ def like_list_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nLink: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Video"])
+        out = out[["Video", "Tijdstip"]]
 
     except Exception as e:
         logger.error(e)
@@ -258,6 +265,7 @@ def searches_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nSearch Term: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Zoekterm"])
+        out = out[["Zoekterm", "Tijdstip"]]
 
     except Exception as e:
         logger.error(e)
@@ -278,6 +286,7 @@ def share_history_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nShared Content: (.*?)\nLink: (.*?)\nMethod: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Gedeelde inhoud", "Url", "Gedeeld via"])
+        out = out[["Gedeelde inhoud", "Url", "Gedeeld via", "Tijdstip"]]
 
     except Exception as e:
         logger.error(e)
@@ -317,7 +326,8 @@ def block_list_to_df(tiktok_zip: str):
 
         pattern = re.compile(r"^Date: (.*?)\nUsername: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
-        out = pd.DataFrame(matches, columns=["Date", "Username"])
+        out = pd.DataFrame(matches, columns=["Tijdstip", "Gebruikersnaam"])
+        out = out[["Gebruikersnaam", "Tijdstip"]]
 
     except Exception as e:
         logger.error(e)
