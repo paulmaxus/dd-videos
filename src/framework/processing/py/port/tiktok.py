@@ -11,6 +11,7 @@ import io
 import pandas as pd
 
 import port.unzipddp as unzipddp
+import port.helpers as helpers
 from port.validate import (
     DDPCategory,
     StatusCode,
@@ -121,6 +122,7 @@ def browsing_history_to_df(tiktok_zip: str) -> pd.DataFrame:
         out = pd.DataFrame(matches, columns=["Tijdstip", "Gekeken video"])
         out = out.drop_duplicates()
         out.reset_index(drop=True, inplace=True)
+        out['Tijdstip'] = out['Tijdstip'].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
         out = out[["Gekeken video", "Tijdstip"]]
 
     except Exception as e:
@@ -142,6 +144,7 @@ def favorite_hashtag_to_df(tiktok_zip: str) -> pd.DataFrame:
         pattern = re.compile(r"^Date: (.*?)\nHashTag Link(?::|::) (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Hashtag url"])
+        out['Tijdstip'] = out['Tijdstip'].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
         out = out[["Hashtag url", "Tijdstip"]]
 
     except Exception as e:
@@ -162,6 +165,7 @@ def favorite_videos_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nLink: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Video"])
+        out['Tijdstip'] = out['Tijdstip'].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
         out = out[["Video", "Tijdstip"]]
 
     except Exception as e:
@@ -183,6 +187,7 @@ def follower_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nUsername: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Gebruikersnaam"])
+        out['Tijdstip'] = out['Tijdstip'].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
         out = out[["Gebruikersnaam", "Tijdstip"]]
 
     except Exception as e:
@@ -204,6 +209,7 @@ def following_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nUsername: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Gebruikersnaam"])
+        out['Tijdstip'] = out['Tijdstip'].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
         out = out[["Gebruikersnaam", "Tijdstip"]]
 
     except Exception as e:
@@ -224,6 +230,7 @@ def hashtag_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Hashtag Name: (.*?)\nHashtag Link: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Hashtag naam", "Hashtag url"])
+        out['Tijdstip'] = out['Tijdstip'].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
         out = out[["Gebruikersnaam", "Tijdstip"]]
 
     except Exception as e:
@@ -245,6 +252,7 @@ def like_list_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nLink: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Video"])
+        out['Tijdstip'] = out['Tijdstip'].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
         out = out[["Video", "Tijdstip"]]
 
     except Exception as e:
@@ -265,6 +273,7 @@ def searches_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nSearch Term: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Zoekterm"])
+        out['Tijdstip'] = out['Tijdstip'].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
         out = out[["Zoekterm", "Tijdstip"]]
 
     except Exception as e:
@@ -286,6 +295,7 @@ def share_history_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nShared Content: (.*?)\nLink: (.*?)\nMethod: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Gedeelde inhoud", "Url", "Gedeeld via"])
+        out['Tijdstip'] = out['Tijdstip'].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
         out = out[["Gedeelde inhoud", "Url", "Gedeeld via", "Tijdstip"]]
 
     except Exception as e:
@@ -327,6 +337,7 @@ def block_list_to_df(tiktok_zip: str):
         pattern = re.compile(r"^Date: (.*?)\nUsername: (.*?)$", re.MULTILINE)
         matches = re.findall(pattern, text)
         out = pd.DataFrame(matches, columns=["Tijdstip", "Gebruikersnaam"])
+        out['Tijdstip'] = out['Tijdstip'].apply(helpers.try_to_convert_any_timestamp_to_iso8601)
         out = out[["Gebruikersnaam", "Tijdstip"]]
 
     except Exception as e:

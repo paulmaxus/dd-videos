@@ -228,7 +228,7 @@ const defaultDescription = new TextBundle()
   )
   .add(
     "nl",
-    "Bepaal of je de onderstaande gegevens wilt doneren. Bekijk de gegevens zorgvuldig en pas zo nodig aan. Met je donatie draag je bij aan het eerder beschreven onderzoek. Alvast hartelijk dank."
+    "Hieronder zie je alle gegevens die je hebt geüpload. Je kunt nu al deze gegevens bekijken en bepalen of je deze wilt delen met ons.\nJe hebt ook de mogelijkheid om specifieke gegevens niet met ons te delen. Dit kun je doen door de vakjes van specifieke rijen die je niet wilt delen, aan te klikken. Daarna klik je op verwijderen.\n*Voor dit onderzoek zijn we enkel geïnteresseerd in de inhoud die gaat over gokken en wedden. Ook al deel je dus gegevens met ons die over andere inhoud gaan, deze zullen we niet gebruiken."
   )
 
 const cancelButtonLabel = new TextBundle().add("en", "No").add("nl", "Nee")
