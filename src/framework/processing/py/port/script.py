@@ -150,7 +150,7 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
         wordcloud = {
             "title": {
                 "en": "The most frequently watched YouTube channels. The size of the words represents how frequently you viewed YouTube channels.", 
-                "nl": "De meest bekeken YouTube-kanalen. De grootte van de woorden geeft weer hoe vaak je YouTube-kanalen hebt bekeken.", 
+                "nl": "Jouw meest bekeken YouTube-kanalen. De grootte van de woorden geeft weer hoe vaak je bepaalde YouTube-kanalen hebt bekeken.", 
             },
             "type": "wordcloud",
             "textColumn": "Kanaal",
@@ -160,7 +160,7 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
         total_watched = {
             "title": {
                 "en": "The total number of YouTube videos you have watched per month.", 
-                "nl": "Hieronder vind je een grafiek die laat zien hoeveel video's je elke maand hebt bekeken.", 
+                "nl": "Het totale aantal YouTube-video's dat je per maand hebt bekeken:", 
             },
             "type": "area",
             "group": {
@@ -179,7 +179,7 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
         hour_of_the_day = {
             "title": {
                 "en": "The total number of YouTube videos you have watched per hour of the day.", 
-                "nl": "Hieronder vind je een grafiek die laat zien hoeveel video's je hebt bekeken per uur van de dag.", 
+                "nl": "Het totale aantal YouTube-video's dat je hebt bekeken per uur van de dag:", 
             },
             "type": "bar",
             "group": {
@@ -197,7 +197,7 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
         df.columns = ['Zoekterm', 'Url', 'Tijdstip']
         table_title = props.Translatable({
             "en": "Your YouTube search history",
-            "nl": "Je YouTube-zoekgeschiedenis",
+            "nl": "Je YouTube zoekgeschiedenis",
         })
         table_description = props.Translatable({
             "en": "In this table you find the search terms you have used on YouTube sorted over time.", 
@@ -220,11 +220,11 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
         df = df[["Kanaaltitel","Kanaal-URL","Kanaal-ID"]]
         table_title = props.Translatable({
             "en": "Your YouTube channel subscriptions",
-            "nl": "Je YouTube-kanaal abonnementen",
+            "nl": "Je YouTube kanaal abonnementen",
         })
         table_description = props.Translatable({
             "en": "In this table, you find the YouTube channels you are subscribed to.", 
-            "nl": "Hieronder vind je een overzicht van de YouTube kanalen waarop je geabonneerd bent.", 
+            "nl": "Hieronder vind je een overzicht van de YouTube kanalen waarop je bent geabonneerd.", 
         })
         table = props.PropsUIPromptConsentFormTable("idasjdhj1", table_title, df, table_description, [])
         tables_to_render.append(table)
@@ -248,12 +248,12 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
             table_description = props.Translatable(
                 {
                     "en": "The table below shows exactly which TikTok videos you watched and when that was. Do you have exactly 250000 rows in the table? Then we couldn't show all your data in this table. Are you curious about the rest? Open the zip file, go to 'Activity' and open 'Browsing history.txt'. Then you can see the rest for yourself. Can't find it? Let us know on WhatsApp.",
-                    "nl": "Hieronder vind je een overzicht van de video's die je hebt bekeken en wanneer dit was. Heb je precies 250000 rijen in de tabel zitten? Dan konden we niet al je data laten zien in deze tabel. Ben je benieuwd naar de rest? Open de zipfile, ga naar 'Activity' en open 'Browsing history.txt'. Dan kun je zelf de rest bekijken.",
+                    "nl": "Hieronder vind je een overzicht van de video's die je hebt bekeken en wanneer dit was. Heb je precies 250.000 rijen in de tabel zitten? Dan konden we niet al je data laten zien in deze tabel. Ben je benieuwd naar de rest? Open de zipfile, ga naar 'Activity' en open 'Browsing history.txt'. Dan kun je zelf de rest bekijken.",
                  }
             )
             hours_logged_in = {
                 "title": {"en": "Total number of videos watched per month", 
-                          "nl": "Hieronder vind je een grafiek die laat zien hoeveel video's je elke maand hebt bekeken."},
+                          "nl": "Totaal aantal video's die je hebt bekeken per maand."},
                 "type": "area",
                 "group": {
                     "column": "Tijdstip",
@@ -269,25 +269,6 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
                 tables_to_render.append(table)
 
             donation_dict[df_name] = df.to_dict(orient="records")
-
-    df = tiktok.favorite_videos_to_df(tiktok_file)
-    if not df.empty:
-        df_name = "tiktok_favorite_videos"
-        table_title = props.Translatable(
-            {
-                "en": "Favorite videos", 
-                "nl": "Video's die je hebt opgeslagen", 
-            }
-        )
-        table_description = props.Translatable(
-            {
-                "en": "In the table below you will find the videos that are among your favorites.", 
-                "nl": "Hieronder vind je een overzicht van de video's die je hebt opgeslagen en wanneer dit was.", 
-             }
-        )
-        table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
-        tables_to_render.append(table)
-        donation_dict[df_name] = df.to_dict(orient="records")
 
     df = tiktok.like_list_to_df(tiktok_file)
     if not df.empty:
@@ -305,6 +286,25 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
              }
         )
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        tables_to_render.append(table)
+        donation_dict[df_name] = df.to_dict(orient="records")
+
+    df = tiktok.favorite_videos_to_df(tiktok_file)
+    if not df.empty:
+        df_name = "tiktok_favorite_videos"
+        table_title = props.Translatable(
+            {
+                "en": "Favorite videos", 
+                "nl": "Video's die je hebt opgeslagen", 
+            }
+        )
+        table_description = props.Translatable(
+            {
+                "en": "In the table below you will find the videos that are among your favorites.", 
+                "nl": "Hieronder vind je een overzicht van de video's die je hebt opgeslagen en wanneer dit was.", 
+             }
+        )
+        table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
 
@@ -326,26 +326,6 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
-    
-    df = tiktok.favorite_hashtag_to_df(tiktok_file)
-    if not df.empty:
-        df_name = "tiktok_favorite_hashtags"
-        table_title = props.Translatable(
-            {
-                "en": "Favorite hashtags", 
-                "nl": "Favoriete hashtags", 
-            }
-        )
-        table_description = props.Translatable(
-            {
-                "en": "The table below lists the hashtags that are among your favorites.", 
-                "nl": "Hieronder vind je de hashtags die tot je favorieten behoren.", 
-             }
-        )
-        table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
-        tables_to_render.append(table)
-        donation_dict[df_name] = df.to_dict(orient="records")
-
 
     df = tiktok.searches_to_df(tiktok_file)
     if not df.empty:
@@ -369,6 +349,25 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
             "textColumn": "Zoekterm",
         }
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, [wordcloud])
+        tables_to_render.append(table)
+        donation_dict[df_name] = df.to_dict(orient="records")
+
+    df = tiktok.favorite_hashtag_to_df(tiktok_file)
+    if not df.empty:
+        df_name = "tiktok_favorite_hashtags"
+        table_title = props.Translatable(
+            {
+                "en": "Favorite hashtags", 
+                "nl": "Hashtags die je volgt", 
+            }
+        )
+        table_description = props.Translatable(
+            {
+                "en": "The table below lists the hashtags that are among your favorites.", 
+                "nl": "Hieronder vind je een overzicht van de hashtags die je volgt en wanneer je bent begonnen met deze hashtags te volgen.", 
+             }
+        )
+        table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
 
@@ -416,13 +415,13 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table_title = props.Translatable(
             {
                 "en": "Blocked accounts on TikTok", 
-                "nl": "Accounts die je blokeert"
+                "nl": "Accounts die je hebt geblokkeerd"
                 }
         )
         table_description = props.Translatable(
             {
                 "en": "Below are users you block.",
-                "nl": "Hieronder vind je accounts die je blokeert.",
+                "nl": "Hieronder vind je een overzicht van de accounts die je hebt geblokkeerd.",
              }
         )
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
