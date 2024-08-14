@@ -125,13 +125,20 @@ def subscriptions_to_df(youtube_zip: str, validation: ValidateInput) -> pd.DataF
     Parses 'subscriptions.csv' or 'abonnementen.csv' from Youtube DDP
     """
 
-    # Determine the language of the file name
-    file_name = "subscriptions.csv"
-    if validation.ddp_category.language == Language.NL:
-        file_name = "abonnementen.csv"
+    df = pd.DataFrame()
 
-    ratings_bytes = unzipddp.extract_file_from_zip(youtube_zip, file_name)
-    df = unzipddp.read_csv_from_bytes_to_df(ratings_bytes)
+    try:
+        # Determine the language of the file name
+        file_name = "subscriptions.csv"
+        if validation.ddp_category.language == Language.NL:
+            file_name = "abonnementen.csv"
+
+        ratings_bytes = unzipddp.extract_file_from_zip(youtube_zip, file_name)
+        df = unzipddp.read_csv_from_bytes_to_df(ratings_bytes)
+
+    except Exception as e:
+        logger.error("Exception was caught:  %s", e)
+    
     return df
 
 
@@ -141,13 +148,20 @@ def my_comments_to_df(youtube_zip: str, validation: ValidateInput) -> pd.DataFra
     Parses 'comments.csv' or 'reacties.csv' from Youtube DDP
     """
 
-    # Determine the language of the file name
-    file_name = "comments.csv"
-    if validation.ddp_category.language == Language.NL:
-        file_name = "reacties.csv"
+    df = pd.DataFrame()
 
-    ratings_bytes = unzipddp.extract_file_from_zip(youtube_zip, file_name)
-    df = unzipddp.read_csv_from_bytes_to_df(ratings_bytes)
+    try:
+        # Determine the language of the file name
+        file_name = "comments.csv"
+        if validation.ddp_category.language == Language.NL:
+            file_name = "reacties.csv"
+
+        ratings_bytes = unzipddp.extract_file_from_zip(youtube_zip, file_name)
+        df = unzipddp.read_csv_from_bytes_to_df(ratings_bytes)
+        
+    except Exception as e:
+            logger.error("Exception was caught:  %s", e)
+
     return df
 
 

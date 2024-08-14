@@ -135,17 +135,17 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
     donation_dict = None
 
     df = youtube.watch_history_to_df(youtube_zip, validation)
-    df.columns = ['Titel', 'Url', 'Reklame', 'Kanaal', 'Tijdstip']
-    # For wordcloud, workaround to not show "null" (downside: affects font size scale)
-    df["Kanaal"] = df["Kanaal"].fillna("")
     if not df.empty:
+        df.columns = ['Titel', 'Url', 'Reclame', 'Kanaal', 'Tijdstip']
+        # For wordcloud, workaround to not show "null" (downside: affects font size scale)
+        df["Kanaal"] = df["Kanaal"].fillna("")
         table_title = props.Translatable({
             "en": "Your YouTube watch history",
             "nl": "Je YouTube kijkgeschiedenis",
         })
         table_description = props.Translatable({
             "en": "In this table you find the videos you watched on YouTube sorted over time. Below, you find visualizations of different parts of this table.", 
-            "nl": "Hieronder vind je een overzicht van de video's die je hebt bekeken en wanneer dit was. *Uit deze lijst gaan we enkel onderzoeken of je video's hebt bekeken die gaan over gokken en wedden.",
+            "nl": "Hieronder vind je een overzicht van de video's die je hebt bekeken en wanneer dit was.",
         })
         wordcloud = {
             "title": {
@@ -193,15 +193,15 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
         tables_to_render.append(table)
 
     df = youtube.search_history_to_df(youtube_zip, validation)
-    df.columns = ['Zoekterm', 'Url', 'Tijdstip']
     if not df.empty:
+        df.columns = ['Zoekterm', 'Url', 'Tijdstip']
         table_title = props.Translatable({
             "en": "Your YouTube search history",
             "nl": "Je YouTube-zoekgeschiedenis",
         })
         table_description = props.Translatable({
             "en": "In this table you find the search terms you have used on YouTube sorted over time.", 
-            "nl": "Hieronder vind je een overzicht van de zoektermen die je hebt gebruikt en wanneer dit was. De zoektermen zijn gesorteerd op tijd. *Uit deze lijst gaan we enkel onderzoeken of je zoektermen die gaan over gokken en wedden hebt gebruikt.", 
+            "nl": "Hieronder vind je een overzicht van de zoektermen die je hebt gebruikt en wanneer dit was. De zoektermen zijn gesorteerd op tijd.", 
         })
         wordcloud = {
             "title": {
@@ -216,15 +216,15 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
         tables_to_render.append(table)
 
     df = youtube.subscriptions_to_df(youtube_zip, validation)
-    df = df[["Kanaaltitel","Kanaal-URL","Kanaal-ID"]]
     if not df.empty:
+        df = df[["Kanaaltitel","Kanaal-URL","Kanaal-ID"]]
         table_title = props.Translatable({
             "en": "Your YouTube channel subscriptions",
             "nl": "Je YouTube-kanaal abonnementen",
         })
         table_description = props.Translatable({
             "en": "In this table, you find the YouTube channels you are subscribed to.", 
-            "nl": "Hieronder vind je een overzicht van de YouTube kanalen waarop je geabonneerd bent. *Uit deze lijst gaan we enkel onderzoeken of je YouTube kanalen die berichten over gokken en wedden plaatsen volgt.", 
+            "nl": "Hieronder vind je een overzicht van de YouTube kanalen waarop je geabonneerd bent.", 
         })
         table = props.PropsUIPromptConsentFormTable("idasjdhj1", table_title, df, table_description, [])
         tables_to_render.append(table)
@@ -248,7 +248,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
             table_description = props.Translatable(
                 {
                     "en": "The table below shows exactly which TikTok videos you watched and when that was. Do you have exactly 250000 rows in the table? Then we couldn't show all your data in this table. Are you curious about the rest? Open the zip file, go to 'Activity' and open 'Browsing history.txt'. Then you can see the rest for yourself. Can't find it? Let us know on WhatsApp.",
-                    "nl": "Hieronder vind je een overzicht van de video's die je hebt bekeken en wanneer dit was. Heb je precies 250000 rijen in de tabel zitten? Dat konden we niet al je data laten zien in deze tabel. Ben je benieuwd naar de rest? Open de zipfile, ga naar 'Activity' en open 'Browsing history.txt'. Dan kun je zelf de rest bekijken. *Uit deze lijst gaan we enkel onderzoeken of je video's hebt bekeken die gaan over gokken en wedden.",
+                    "nl": "Hieronder vind je een overzicht van de video's die je hebt bekeken en wanneer dit was. Heb je precies 250000 rijen in de tabel zitten? Dan konden we niet al je data laten zien in deze tabel. Ben je benieuwd naar de rest? Open de zipfile, ga naar 'Activity' en open 'Browsing history.txt'. Dan kun je zelf de rest bekijken.",
                  }
             )
             hours_logged_in = {
@@ -282,7 +282,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table_description = props.Translatable(
             {
                 "en": "In the table below you will find the videos that are among your favorites.", 
-                "nl": "Hieronder vind je een overzicht van de video's die je hebt opgeslagen en wanneer dit was. *Uit deze lijst gaan we enkel onderzoeken of je video's hebt opgeslagen die gaan over gokken en wedden.", 
+                "nl": "Hieronder vind je een overzicht van de video's die je hebt opgeslagen en wanneer dit was.", 
              }
         )
         table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
@@ -301,7 +301,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table_description = props.Translatable(
             {
                 "en": "The table below shows the videos you've liked and when that was.",
-                "nl": "Hieronder vind je een overzicht van de video's die je hebt geliket en wanneer dit was. *Uit deze lijst gaan we enkel onderzoeken of je video's hebt geliket die gaan over gokken en wedden.",
+                "nl": "Hieronder vind je een overzicht van de video's die je hebt geliket en wanneer dit was.",
              }
         )
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
@@ -320,7 +320,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table_description = props.Translatable(
             {
                 "en": "The table below shows what you shared, at what time and how.",
-                "nl": "Hieronder vind je een overzicht van de video's die je hebt gedeeld, wanneer dit was en de manier waarop je het hebt gedeeld. *Uit deze lijst gaan we enkel onderzoeken of je video's hebt gedeeld die gaan over gokken en wedden.",
+                "nl": "Hieronder vind je een overzicht van de video's die je hebt gedeeld, wanneer dit was en de manier waarop je het hebt gedeeld.",
              }
         )
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
@@ -359,7 +359,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table_description = props.Translatable(
             {
                 "en": "The chart below shows what you searched for and when that was.",
-                "nl": "Hieronder vind je een overzicht van de zoektermen die je hebt gebruikt en wanneer dit was. *Uit deze lijst gaan we enkel onderzoeken of je zoektermen die gaan over gokken en wedden hebt gebruikt.",
+                "nl": "Hieronder vind je een overzicht van de zoektermen die je hebt gebruikt en wanneer dit was.",
              }
         )
         wordcloud = {
@@ -384,7 +384,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table_description = props.Translatable(
             {
                 "en": "The table below shows your followers and when they started following you.",
-                "nl": "Hieronder vind je een overzicht van de accounts die jou volgen en de datum waarop ze zijn gestart met jou te volgen. *Uit deze lijst gaan we enkel onderzoeken of er accounts die berichten over gokken en wedden plaatsen jou volgen.",
+                "nl": "Hieronder vind je een overzicht van de accounts die jou volgen en de datum waarop ze zijn gestart met jou te volgen.",
              }
         )
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
@@ -403,7 +403,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table_description = props.Translatable(
             {
                 "en": "The table below shows users you follow and the time you started following them.",
-                "nl": "Hieronder vind je een overzicht van de accounts die je volgt en de datum waarop je ze bent gaan volgen. *Uit deze lijst gaan we enkel onderzoeken of je accounts die berichten over gokken en wedden plaatsen volgt.",
+                "nl": "Hieronder vind je een overzicht van de accounts die je volgt en de datum waarop je ze bent gaan volgen.",
              }
         )
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
@@ -422,7 +422,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
         table_description = props.Translatable(
             {
                 "en": "Below are users you block.",
-                "nl": "Hieronder vind je accounts die je blokeert. *Uit deze lijst gaan we enkel onderzoeken of je accounts die berichten over gokken en wedden plaatsen blokeert.",
+                "nl": "Hieronder vind je accounts die je blokeert.",
              }
         )
         table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
