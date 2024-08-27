@@ -113,6 +113,13 @@ def process(session_id):
                     yield donate(platform_name, consent_result.value)
                 yield donate_logs(f"{session_id}-{platform_name}-tracking")
                 yield donate_status(f"{session_id}-{platform_name}-DONATED", "DONATED")
+                # render questionnaire
+                render_questionnaire_results = yield render_questionnaire(platform_name)
+                if render_questionnaire_results.__type__ == "PayloadJSON":
+                    yield donate(f"{session_id}-questionnaire-donation", render_questionnaire_results.value)
+                else:
+                    LOGGER.info("Skipped questionnaire: %s", platform_name)
+                    yield donate_logs(f"{session_id}-tracking")
 
             else:
                 LOGGER.info("Skipped ater reviewing consent: %s", platform_name)
@@ -521,4 +528,52 @@ def donate_dict(platform_name: str, d: dict):
     for k, v in d.items():
         donation_str = json.dumps({k: v})
         yield donate(f"{platform_name}_{k}", donation_str)
+
+# Questionnaire
+
+Q1 = props.Translatable(
+    {
+        "en": "Question",
+        "nl": "In de afgelopen 12 maanden, hoe vaak heb jij berichten of reclame over gokken en wedden op deze platform gezien?"
+    })
+Q1_CHOICES = [
+    props.Translatable(
+        {"en": "", "nl": "Nooit"}),
+    props.Translatable(
+        {"en": "", "nl": "Eén keer per jaar"}),
+    props.Translatable(
+        {"en": "", "nl": "Meerdere keren per jaar"}),
+    props.Translatable(
+        {"en": "", "nl": "Eén keer per maand"}),
+    props.Translatable(
+        {"en": "", "nl": "Meerdere keren per maand"}),
+    props.Translatable(
+        {"en": "", "nl": "Eén keer per week"}),
+    props.Translatable(
+        {"en": "", "nl": "Meerdere keren per week"}),
+    props.Translatable(
+        {"en": "", "nl": "Eén keer per dag"}),
+    props.Translatable(
+        {"en": "", "nl": "Meerdere keren per dag"})   
+]
+
+def render_questionnaire(platform: str):
+    questions = [
+        props.PropsUIQuestionMultipleChoice(question=Q1, id=1, choices=Q1_CHOICES),
+    ]
+
+    description = props.Translatable(
+        {
+            "en": "",
+            "nl": f"We willen je graag nog een vraag stellen over het gebruik van {platform}."
+        })
+    header = props.PropsUIHeader(props.Translatable({"en": "Questionnaire", "nl": "Vragenlijst"}))
+    body = props.PropsUIPromptQuestionnaire(
+        questions=questions, 
+        description=description
+    )
+    footer = props.PropsUIFooter()
+
+    page = props.PropsUIPageDonation(platform, header, body, footer)
+    return CommandUIRender(page)
 
