@@ -531,11 +531,6 @@ def donate_dict(platform_name: str, d: dict):
 
 # Questionnaire
 
-Q1 = props.Translatable(
-    {
-        "en": "Question",
-        "nl": "In de afgelopen 12 maanden, hoe vaak heb jij berichten of reclame over gokken en wedden op deze platform gezien?"
-    })
 Q1_CHOICES = [
     props.Translatable(
         {"en": "", "nl": "Nooit"}),
@@ -558,6 +553,13 @@ Q1_CHOICES = [
 ]
 
 def render_questionnaire(platform: str):
+
+    Q1 = props.Translatable(
+        {
+            "en": "Question",
+            "nl": f"In de afgelopen 12 maanden, hoe vaak heb jij berichten of reclame over gokken en wedden op {platform} gezien?"
+        })
+
     questions = [
         props.PropsUIQuestionMultipleChoice(question=Q1, id=1, choices=Q1_CHOICES),
     ]
