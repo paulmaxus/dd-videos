@@ -272,7 +272,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
             }
             # only the first df chunk is shown as table 
             if i == 0:
-                table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, [hours_logged_in]) 
+                table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, [hours_logged_in], delete_option=False) 
                 tables_to_render.append(table)
 
             donation_dict[df_name] = df.to_dict(orient="records")
@@ -292,7 +292,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
                 "nl": "Hieronder vind je een overzicht van de video's die je hebt geliket en wanneer dit was.",
              }
         )
-        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, delete_option=False)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
 
@@ -311,7 +311,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
                 "nl": "Hieronder vind je een overzicht van de video's die je hebt opgeslagen en wanneer dit was.", 
              }
         )
-        table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, delete_option=False)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
 
@@ -330,7 +330,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
                 "nl": "Hieronder vind je een overzicht van de video's die je hebt gedeeld, wanneer dit was en de manier waarop je het hebt gedeeld.",
              }
         )
-        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, delete_option=False)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
 
@@ -355,7 +355,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
             "type": "wordcloud",
             "textColumn": "Zoekterm",
         }
-        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, [wordcloud])
+        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, [wordcloud], delete_option=False)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
 
@@ -374,7 +374,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
                 "nl": "Hieronder vind je een overzicht van de hashtags die je volgt en wanneer je bent begonnen met deze hashtags te volgen.", 
              }
         )
-        table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        table = props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, delete_option=False)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
 
@@ -393,7 +393,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
                 "nl": "Hieronder vind je een overzicht van de accounts die jou volgen en de datum waarop ze zijn gestart met jou te volgen.",
              }
         )
-        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, delete_option=False)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
 
@@ -412,7 +412,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
                 "nl": "Hieronder vind je een overzicht van de accounts die je volgt en de datum waarop je ze bent gaan volgen.",
              }
         )
-        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, delete_option=False)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
     
@@ -431,7 +431,7 @@ def extract_tiktok(tiktok_file: str, validation) -> Tuple[list[props.PropsUIProm
                 "nl": "Hieronder vind je een overzicht van de accounts die je hebt geblokkeerd.",
              }
         )
-        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description)
+        table =  props.PropsUIPromptConsentFormTable(df_name, table_title, df, table_description, delete_option=False)
         tables_to_render.append(table)
         donation_dict[df_name] = df.to_dict(orient="records")
     

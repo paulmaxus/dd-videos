@@ -390,6 +390,7 @@ export interface TableContext {
   deletedRows: string[][]
   visualizations?: any[]
   folded: boolean
+  deleteOption: boolean
 }
 
 export type TableWithContext = TableContext & PropsUITable
