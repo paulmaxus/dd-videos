@@ -40,8 +40,7 @@ def process(session_id):
     LOGGER.info("Starting the donation flow")
     yield donate_logs(f"{session_id}-tracking")
 
-    platforms = [("YouTube", extract_youtube, youtube.validate_zip), 
-                 ("TikTok", extract_tiktok, tiktok.validate_zip)]
+    platforms = [("TikTok", extract_tiktok, tiktok.validate_zip)]
 
     #platforms = [ ("YouTube", extract_youtube, youtube.validate_zip), ]
     #platforms = [ ("TikTok", extract_tiktok, tiktok.validate_zip), ]
