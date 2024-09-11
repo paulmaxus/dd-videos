@@ -232,7 +232,7 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
             "en": "In this table, you find the YouTube channels you are subscribed to.", 
             "nl": "Hieronder vind je een overzicht van de YouTube kanalen waarop je bent geabonneerd.", 
         })
-        table = props.PropsUIPromptConsentFormTable("idasjdhj1", table_title, df, table_description, [])
+        table = props.PropsUIPromptConsentFormTable("youtube_subscriptions", table_title, df, table_description, [])
         tables_to_render.append(table)
 
     return (tables_to_render, donation_dict)
