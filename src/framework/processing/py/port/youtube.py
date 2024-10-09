@@ -175,7 +175,7 @@ def watch_history_extract_html(bytes: io.BytesIO) -> pd.DataFrame:
     datapoints = []
 
     try:
-        tree = etree.HTML(bytes.read())
+        tree = etree.HTML(bytes.read(), parser=etree.HTMLParser(encoding='UTF-8'))
         outer_container_class = "outer-cell mdl-cell mdl-cell--12-col mdl-shadow--2dp"
         watch_history_container_class = "content-cell mdl-cell mdl-cell--6-col mdl-typography--body-1"
         ads_container_class = "content-cell mdl-cell mdl-cell--12-col mdl-typography--caption"
@@ -237,7 +237,7 @@ def search_history_extract_html(bytes: io.BytesIO) -> pd.DataFrame:
     datapoints = []
 
     try:
-        tree = etree.HTML(bytes.read())
+        tree = etree.HTML(bytes.read(), parser=etree.HTMLParser(encoding='UTF-8'))
         outer_container_class = "outer-cell mdl-cell mdl-cell--12-col mdl-shadow--2dp"
         search_history_container_class = "content-cell mdl-cell mdl-cell--6-col mdl-typography--body-1"
         ads_container_class = "content-cell mdl-cell mdl-cell--12-col mdl-typography--caption"
