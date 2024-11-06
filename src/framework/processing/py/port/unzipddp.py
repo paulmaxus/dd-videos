@@ -29,8 +29,7 @@ def extract_file_from_zip(zfile: str, file_to_extract: str) -> io.BytesIO:
 
             for f in zf.namelist():
                 logger.debug("Contained in zip: %s", f)
-                if Path(f).name == file_to_extract:
-
+                if file_to_extract in f:
                     file_to_extract_bytes = io.BytesIO(zf.read(f))
                     file_found = True
                     break

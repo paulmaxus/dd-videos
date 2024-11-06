@@ -299,7 +299,7 @@ def watch_history_to_df(youtube_zip: str, validation: ValidateInput) -> pd.DataF
             # Determine the language of the file name
             file_name = "watch-history.html"
             if validation.ddp_category.language == Language.NL:
-                file_name = "kijkgeschiedenis.html"
+                file_name = "/geschiedenis/kijkgeschiedenis.html"
 
             html_bytes_buf = unzipddp.extract_file_from_zip(youtube_zip, file_name)
             out = watch_history_extract_html(html_bytes_buf)
@@ -325,7 +325,7 @@ def search_history_to_df(youtube_zip: str, validation: ValidateInput) -> pd.Data
             # Determine the language of the file name
             file_name = "search-history.html"
             if validation.ddp_category.language == Language.NL:
-                file_name = "zoekgeschiedenis.html"
+                file_name = "/geschiedenis/zoekgeschiedenis.html"
 
             html_bytes_buf = unzipddp.extract_file_from_zip(youtube_zip, file_name)
             out = search_history_extract_html(html_bytes_buf)
