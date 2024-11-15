@@ -223,6 +223,8 @@ def extract_youtube(youtube_zip: str, validation: validate.ValidateInput) -> Tup
 
     df = youtube.subscriptions_to_df(youtube_zip, validation)
     if not df.empty:
+        df.columns = ['Kanaal-ID', 'Kanaal-URL', 'Kanaaltitel']
+        # Re-order
         df = df[["Kanaaltitel","Kanaal-URL","Kanaal-ID"]]
         table_title = props.Translatable({
             "en": "Your YouTube channel subscriptions",
